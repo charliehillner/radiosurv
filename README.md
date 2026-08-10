@@ -76,24 +76,24 @@ For each voxel, DICOM provides both image information and metadata describing it
 
 Stored CT pixel values are transformed to Hounsfield Units (HU) using the DICOM rescaling parameters:
 
-\[
+$$
 HU = \text{pixel value} \cdot \text{RescaleSlope}
      + \text{RescaleIntercept}
-\]
+$$
 
 The tumor segmentation defines a region of interest (ROI) within this volume.
 
 Conceptually, the subsequent radiomics analysis therefore investigates the CT field
 
-\[
+$$
 HU(x,y,z)
-\]
+$$
 
 restricted to locations belonging to the segmented gross tumor volume (GTV):
 
-\[
+$$
 M_{\mathrm{GTV}}(x,y,z) = 1.
-\]
+$$
 
 This provides the basis for extracting quantitative descriptions of tumor intensity, heterogeneity, texture, size, and shape.
 
