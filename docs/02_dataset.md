@@ -101,6 +101,12 @@ Each patient should contribute:
 If multiple scans or segmentations exist for a patient, explicit selection
 rules will be defined before analysis.
 
+## Initial DICOM inspection
+
+Inspection of patient LUNG1-001 identified three DICOM series within the available study. The imaging series consists of 134 CT Image Storage instances. In addition, the study contains one RT Structure Set (RTSTRUCT) and one DICOM Segmentation (SEG) object. The latter is explicitly described as Segmentation.
+
+The CT slices share a common SeriesInstanceUID, identifying them as instances belonging to the same CT series.
+
 ## Planned Data Representation
 
 Raw imaging data will be stored separately from the modeling dataset.

@@ -1,0 +1,73 @@
+# ==============================
+# Data
+# ==============================
+
+# Raw medical imaging / clinical data
+data/raw/
+
+# Generated/intermediate data
+data/interim/
+data/processed/
+
+# Keep directory structure if needed
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+
+
+# ==============================
+# Python
+# ==============================
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+
+# ==============================
+# Jupyter
+# ==============================
+
+.ipynb_checkpoints/
+
+
+# ==============================
+# PyCharm / JetBrains
+# ==============================
+
+.idea/
+
+
+# ==============================
+# Testing / Coverage
+# ==============================
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+
+# ==============================
+# OS files
+# ==============================
+
+.DS_Store
+Thumbs.db
+
+
+# ==============================
+# Temporary files
+# ==============================
+
+*.tmp
+*.log
