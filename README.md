@@ -68,6 +68,37 @@ The DICOM SEG object contains four segmented structures:
 
 These observations currently refer specifically to the inspected case and should not yet be assumed to hold for the complete cohort.
 
+## Mathematical View of the Imaging Data
+
+The CT image can be interpreted as a spatially calibrated, discretely
+sampled scalar field
+
+$$
+HU : \Omega \subset \mathbb{R}^3 \rightarrow \mathbb{R},
+$$
+
+where $HU(x,y,z)$ denotes the Hounsfield Unit associated with a spatial
+location $(x,y,z)$ in the patient coordinate system.
+
+The gross tumor volume is represented by a binary segmentation mask
+
+$$
+M_{\mathrm{GTV}} : \Omega \rightarrow \{0,1\}.
+$$
+
+Radiomics then characterizes the CT information within the segmented
+tumor region
+
+$$
+\Omega_{\mathrm{GTV}}
+=
+\left\{
+(x,y,z)\in\Omega
+\mid
+M_{\mathrm{GTV}}(x,y,z)=1
+\right\}.
+$$
+
 ## From CT Images to Quantitative Data
 
 A CT scan can be represented as a spatially calibrated three-dimensional field of CT values.
@@ -92,10 +123,24 @@ $$
 restricted to locations belonging to the segmented gross tumor volume (GTV):
 
 $$
-M_{\mathrm{GTV}}(x,y,z) = 1.
+M_{\mathrm{GTV}}(x,y,z) = \begin{cases}
+1, & \text{if } (x,y,z) \text{ belongs to the GTV},\\
+0, & \text{otherwise}.
+\end{cases}.
 $$
 
 This provides the basis for extracting quantitative descriptions of tumor intensity, heterogeneity, texture, size, and shape.
+
+Radiomic features are extracted from the CT field restricted to the tumor region:
+
+$$
+\left\{
+HU(x,y,z)
+\;\middle|\;
+M_{\mathrm{GTV}}(x,y,z)=1
+\right\}.
+$$
+
 
 ## Planned Analysis
 
