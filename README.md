@@ -119,11 +119,11 @@ The tumor region can consequently be defined as
 $$
 \Omega_{\mathrm{GTV}}
 =
-\{
+\{\,
 (x,y,z)\in\Omega
 \mid
 M_{\mathrm{GTV}}(x,y,z)=1
-\}.
+,\}.
 $$
 
 Radiomics aims to quantitatively characterize the CT information and
@@ -164,11 +164,7 @@ This provides the basis for extracting quantitative descriptions of tumor intens
 Radiomic features are extracted from the CT field restricted to the tumor region:
 
 $$
-\left\{
-HU(x,y,z)
-\;\middle|\;
-M_{\mathrm{GTV}}(x,y,z)=1
-\right\}.
+\{\,HU(x,y,z) \mid M_{\mathrm{GTV}}(x,y,z)=1\,\}
 $$
 
 
