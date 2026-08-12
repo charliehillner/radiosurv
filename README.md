@@ -70,34 +70,64 @@ These observations currently refer specifically to the inspected case and should
 
 ## Mathematical View of the Imaging Data
 
-The CT image can be interpreted as a spatially calibrated, discretely
-sampled scalar field
+A CT scan consists of a sequence of two-dimensional image slices that
+together represent a three-dimensional region of the patient's body.
+
+Let
 
 $$
-HU : \Omega \subset \mathbb{R}^3 \rightarrow \mathbb{R},
+\Omega \subset \mathbb{R}^3
+$$
+
+denote the spatial region covered by the CT acquisition in the DICOM
+patient coordinate system. A point
+
+$$
+(x,y,z) \in \Omega
+$$
+
+therefore represents a physical location within the scanned volume, with
+coordinates measured in millimetres.
+
+In practice, the CT image does not provide measurements at every point
+of this continuous region. Instead, $\Omega$ is sampled on a discrete
+three-dimensional voxel grid whose geometry is determined by the DICOM
+metadata, including pixel spacing, image orientation, and slice
+positions.
+
+The CT image can therefore be interpreted conceptually as a spatially
+calibrated scalar field
+
+$$
+HU : \Omega \rightarrow \mathbb{R},
 $$
 
 where $HU(x,y,z)$ denotes the Hounsfield Unit associated with a spatial
-location $(x,y,z)$ in the patient coordinate system.
+location $(x,y,z)$.
 
 The gross tumor volume is represented by a binary segmentation mask
 
 $$
-M_{\mathrm{GTV}} : \Omega \rightarrow \{0,1\}.
+M_{\mathrm{GTV}} : \Omega \rightarrow \{0,1\},
 $$
 
-Radiomics then characterizes the CT information within the segmented
-tumor region
+where $M_{\mathrm{GTV}}(x,y,z)=1$ indicates that the corresponding
+location belongs to the segmented tumor.
+
+The tumor region can consequently be defined as
 
 $$
 \Omega_{\mathrm{GTV}}
 =
-\left\{
+\{
 (x,y,z)\in\Omega
 \mid
 M_{\mathrm{GTV}}(x,y,z)=1
-\right\}.
+\}.
 $$
+
+Radiomics aims to quantitatively characterize the CT information and
+spatial structure within this region.
 
 ## From CT Images to Quantitative Data
 
