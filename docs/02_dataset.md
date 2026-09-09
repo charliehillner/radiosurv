@@ -39,21 +39,34 @@ repository.
 
 ## 3. Patient Cohort
 
-### Questions to investigate
+## 3. Patient Cohort
 
-The following cohort characteristics still need to be systematically
-investigated:
+The clinical dataset contains 422 unique patients with non-small-cell lung
+cancer (NSCLC). Each patient is represented by exactly one clinical record,
+identified by a unique `PatientID` of the form `LUNG1-XXX`.
 
-- number of patients,
-- disease characteristics,
-- demographic characteristics,
-- treatment information,
-- inclusion and exclusion criteria,
-- availability of imaging and segmentation data,
-- availability of clinical outcome data.
+The cohort is predominantly composed of patients with locally advanced
+disease. Overall clinical stage is available for 421 patients:
 
-These characteristics will be documented after inspection of the
-collection-level metadata and clinical data.
+| Overall stage | Patients |
+|---|---:|
+| I | 93 |
+| II | 40 |
+| IIIa | 112 |
+| IIIb | 176 |
+| Missing | 1 |
+
+Thus, 288 of 421 patients with known overall stage (68.4%) have stage IIIa
+or IIIb disease.
+
+The cohort contains 290 male and 132 female patients.
+
+Age is available for 400 patients. The median age is 68.6 years, with
+observed ages ranging from 33.7 to 91.7 years.
+
+Pretreatment CT imaging is available as part of the LUNG1 collection.
+Consequently, the imaging information used for radiomic feature extraction
+precedes the survival follow-up starting at treatment initiation.
 
 
 ## 4. Imaging Data
@@ -316,55 +329,112 @@ subsequent extraction of intensity, texture, size, and shape features.
 
 ## 6. Clinical Variables
 
-### Questions to investigate
+## 6. Clinical Variables
 
-The available clinical data still need to be inspected systematically.
+The clinical dataset contains the following variables:
 
-Of particular interest are:
+| Variable | Description | Missing |
+|---|---|---:|
+| `PatientID` | Patient identifier | 0 |
+| `age` | Age | 22 |
+| `clinical.T.Stage` | Clinical T-stage code | 1 |
+| `Clinical.N.Stage` | Clinical N-stage code | 0 |
+| `Clinical.M.Stage` | Clinical M-stage code | 0 |
+| `Overall.Stage` | Overall clinical stage | 1 |
+| `Histology` | Histological tumor type | 42 |
+| `gender` | Sex | 0 |
+| `Survival.time` | Observed survival/follow-up time | 0 |
+| `deadstatus.event` | Survival event indicator | 0 |
 
-- patient demographics,
-- tumor characteristics,
-- disease stage,
-- treatment-related variables,
-- survival information,
-- potential prognostic covariates,
-- missing values.
+The observed histological categories are:
 
-These variables will determine which clinical baseline models can be
-constructed and whether radiomic features provide additional prognostic
-information.
+| Histology | Patients |
+|---|---:|
+| Squamous cell carcinoma | 152 |
+| Large cell | 114 |
+| NOS | 63 |
+| Adenocarcinoma | 51 |
+| Missing | 42 |
+
+The TNM variables are numerically encoded but should not automatically be
+interpreted as continuous numerical variables.
+
+Furthermore, several uncommon codes occur:
+
+- `clinical.T.Stage = 5` for 2 patients,
+- `Clinical.N.Stage = 4` for 3 patients,
+- `Clinical.M.Stage = 3` for 4 patients.
+
+These values fall outside the conventional integer ranges expected from a
+simple encoding of the corresponding TNM categories. Their meaning has not
+yet been established from the available variable documentation.
+
+Internal consistency checks provide additional evidence that these values
+should not be interpreted naively as conventional TNM categories. In
+particular, all four patients with `Clinical.M.Stage = 3` are classified as
+overall stage IIIa or IIIb rather than as metastatic stage IV disease.
+
+The uncommon codes will therefore be retained unchanged during the data
+understanding phase and must be resolved before the TNM variables are used
+for statistical modelling.
 
 
 ## 7. Survival Endpoints
 
-The exact survival endpoint must be determined from the available clinical
-data and dataset documentation.
+## 7. Survival Endpoints
 
-For survival analysis, at minimum two quantities are required for each
-patient:
+The clinical dataset provides survival information for all 422 patients.
+
+`Survival.time` represents the observed survival or follow-up time in days,
+measured from the start of treatment.
+
+Let
 
 $$
-T_i = \text{observed follow-up time}
+T_i
 $$
 
-and
+denote the true time from treatment initiation to death and
+
+$$
+C_i
+$$
+
+the censoring time. The observed time is therefore
+
+$$
+Y_i = \min(T_i,C_i).
+$$
+
+The variable `deadstatus.event` represents the event indicator
 
 $$
 \delta_i =
 \begin{cases}
-1, & \text{event observed},\\
+1, & \text{death observed},\\
 0, & \text{right-censored}.
 \end{cases}
 $$
 
-Before modelling, the following questions must therefore be resolved:
+The cohort contains:
 
-- What event is represented by the available survival endpoint?
-- From which starting point is survival time measured?
-- In which unit is follow-up time recorded?
-- How is censoring represented?
-- Are survival time and event status available for all patients?
-- Are there inconsistencies or implausible values?
+- 373 observed deaths (88.4%),
+- 49 right-censored observations (11.6%).
+
+For a censored patient with observed time $Y_i$, the exact survival time is
+unknown; the available information is
+
+$$
+T_i > Y_i.
+$$
+
+Observed follow-up/survival times range from 10 to 4454 days, with a median
+observed time of 545.5 days.
+
+The median of the observed `Survival.time` variable must not be interpreted
+as the median survival time. The latter must account for right censoring and
+is defined through the estimated survival function, for example using the
+Kaplan-Meier estimator.
 
 
 ## 8. Data Quality and Completeness
